@@ -1,0 +1,49 @@
+from anytree import Node, RenderTree
+from collections import deque
+
+
+def breadth_first_search(root_node, target_name):
+  open_list = deque([root_node])
+  closed_list = set()
+  while open_list:
+    current_node = open_list.popleft()
+    if current_node.name == target_name:
+      return current_node
+    closed_list.add(current_node)
+    children_nodes = current_node.children
+    for child_node in children_nodes:
+      if child_node not in closed_list:
+        open_list.append(child_node)
+    print("Step:", current_node.name)
+    print("Open List:", [node.name for node in open_list])
+    print("Closed List:", [node.name for node in closed_list])
+    print()
+
+  return None
+
+
+if __name__ == "__main__":
+  A = Node("A")
+  B = Node("B", parent=A)
+  C = Node("C", parent=A)
+  D = Node("D", parent=B)
+  E = Node("E", parent=B)
+  F = Node("F", parent=C)
+  G = Node("G", parent=C)
+  for pre, fill, node in RenderTree(A):
+    print("%s%s" % (pre, node.name))
+
+  start_node = A
+  goal_node_name = input("Enter the Node Which You Want To Search:")
+
+  result_node = breadth_first_search(start_node, goal_node_name)
+
+  if result_node is not None:
+    path = [result_node.name]
+    while result_node.parent is not None:
+      result_node = result_node.parent
+      path.append(result_node.name)
+    path.reverse()
+    print("Path found:", " -> ".join(path))
+  else:
+    print("Goal node not reachable.")
