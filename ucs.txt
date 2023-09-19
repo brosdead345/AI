@@ -1,0 +1,55 @@
+from anytree import NodeMixin, RenderTree
+from collections import deque
+class CostNode(NodeMixin):
+  def __init__(self, name, parent=None, cost=0):
+    super(CostNode, self).__init__()
+    self.name = name
+    self.parent = parent
+    self.cost = cost
+def uniform_cost_search(root_node, target_name):
+  open_list = deque([root_node])
+  closed_list = set()
+  while open_list:
+    open_list = deque(sorted(open_list, key=lambda node: node.cost))
+    current_node = open_list.popleft()
+    if current_node.name == target_name:
+      return current_node
+    closed_list.add(current_node)
+    children_nodes = current_node.children
+    for child_node in children_nodes:
+      if child_node not in closed_list:
+        open_list.append(child_node)
+    print("Step:", current_node.name)
+    open_list_names = [node.name for node in open_list]
+    print("Open List:", open_list_names)
+    print("Closed List:", [node.name for node in closed_list])
+    print()
+
+  return None
+
+
+A = CostNode("A")
+B = CostNode("B", parent=A, cost=5)
+C = CostNode("C", parent=A, cost=3)
+D = CostNode("D", parent=B, cost=2)
+E = CostNode("E", parent=B, cost=5)
+F = CostNode("F", parent=C, cost=5)
+G = CostNode("G", parent=C, cost=6)
+
+for pre, fill, node in RenderTree(A):
+  print("%s%s,(%s)" % (pre, node.name, node.cost))
+start_node = A
+goal_node_name = input("Enter the Node Which You Want To Search:")
+result_node = uniform_cost_search(start_node, goal_node_name)
+if result_node is not None:
+  path = [result_node.name]
+  total_cost = result_node.cost
+  while result_node.parent is not None:
+    result_node = result_node.parent
+    path.append(result_node.name)
+    total_cost += result_node.cost
+  path.reverse()
+  print("Path found:", " -> ".join(path))
+  print("Total Cost:", total_cost)
+else:
+  print("Goal node not reachable.")
