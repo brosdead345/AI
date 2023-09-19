@@ -1,0 +1,32 @@
+import pandas as pd
+d={'percept':[],"action":[]}
+while True:
+    a=input("Press 0 to exit or Enter the room to clean:")
+    if a=='0':
+        dataframe=pd.DataFrame(d)
+        print(dataframe)
+        break
+    b=input("Enter clean/dirty:")
+    
+    if a.lower()=="a":
+        if b.lower()=='clean':
+            d['percept'].append("[A, Clean]")
+            d['action'].append("Move right")
+            print("Move right")
+        elif b.lower()=='dirty':
+            d['percept'].append("[A, Dirty]")
+            d['action'].append("Suck")
+            print("Suck")
+        else:
+            print("Invalid instruction, please input again")
+    else:
+        if b.lower()=='clean':
+            d['percept'].append("[B, Clean]")
+            d['action'].append("Move left")
+            print("Move left")
+        elif b.lower()=='dirty':
+            d['percept'].append("[B, Dirty]")
+            d['action'].append("Suck")
+            print("Suck")
+        else:
+            print("Invalid instruction, please input again")
