@@ -1,0 +1,91 @@
+from collections import deque
+
+class Monkey:
+    def __init__(self, x, y) -> None:
+        self.x: int = x
+        self.y: int = y
+
+class Box:
+    def __init__(self, x, y) -> None:
+        self.x: int = x
+        self.y: int = y
+
+def is_valid(x, y) -> bool:
+    return 0 <= x < 5 and 0 <= y < 5
+
+def bfs(start_x, start_y, target_x, target_y) -> list:
+    queue: list = deque([(start_x, start_y)])
+    visited: set = set([(start_x, start_y)])
+    parent: dict = {}
+
+    while queue:
+        x, y = queue.popleft()
+
+        if x == target_x and y == target_y:
+            path = []
+            while (x, y) != (start_x, start_y):
+                path.append((x, y))
+                x, y = parent[(x, y)]
+            path.append((start_x, start_y))
+            return path[::-1]
+
+        for dx, dy in [(1, 0), (-1, 0), (0, 1), (0, -1), (1, 1), (-1, 1), (-1, -1), (1, -1)]:
+            new_x, new_y = x + dx, y + dy
+
+            if is_valid(new_x, new_y) and (new_x, new_y) not in visited:
+                queue.append((new_x, new_y))
+                visited.add((new_x, new_y))
+                parent[(new_x, new_y)] = (x, y)
+
+    return None
+
+def print_grid(monkey, box, bananas) -> None:
+    print()
+    for i in range(5):
+        for j in range(5):
+            if monkey.x == i and monkey.y == j:
+                print('M', end=" ")
+            elif box.x == i and box.y == j:
+                print('B', end=" ")
+            elif (i, j) in bananas:
+                print('X', end=" ")
+            else:
+                print('•', end=" ")
+        print()
+    print()
+
+box_x, box_y = map(int, input("Enter x and y coordinates of the box (separated by a space): ").split())
+box = Box(box_x, box_y)
+monkey = Monkey(0, 2)
+bananas = [(2, 2)]
+count = 0
+
+print("Initial State:")
+print_grid(monkey, box, bananas)
+
+print("\n..................\nMonkey is going towards the box...")
+box_path = bfs(monkey.x, monkey.y, box.x, box.y)
+
+if box_path:
+    print("....................\nMonkey reached the box...")
+    for step_x, step_y in box_path:
+        count += 1
+        monkey.x, monkey.y = step_x, step_y
+        print_grid(monkey, box, bananas)
+
+    print("....................\nMonkey reached the bananas with the box!!!")
+    banana_path = bfs(box.x, box.y, bananas[0][0], bananas[0][1])
+
+    if banana_path:
+        print("Reaching bananas in 3 -> 2 -> 1 !!!")
+        for step_x, step_y in banana_path:
+            count += 1
+            monkey.x, monkey.y = step_x, step_y
+            box.x, box.y = step_x, step_y
+            print_grid(monkey, box, bananas)
+
+        print(f"______Monkey Banana Problem Solved______\nTotal steps taken = {count}")
+    else:
+        print("Monkey cannot reach the bananas with the box.")
+else:
+    print("Monkey cannot reach the box. The problem is unsolvable.")
