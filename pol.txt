@@ -1,0 +1,184 @@
+from sympy import symbols, Not, And, Or, Implies, Equivalent,simplify
+# Define propositional variables
+p, q, r = symbols('p q r')
+
+#NOT (Negation):
+not_p = Not(p)
+     
+#AND (Conjunction):
+p_and_q = And(p, q)
+ 
+#OR (Disjunction):
+p_or_q = Or(p, q)
+
+#IMPLIES (Implication):
+p_implies_q = Implies(p, q)
+
+#EQUIVALENT (Equivalence):
+p_biimplies_q = Equivalent(p,q)
+p_equivalent_q=Equivalent(p,q)
+print("negation",not_p) 
+print("Conjunction",p_and_q)
+print("Disjunction",p_or_q)
+print("Implication",p_implies_q)
+print("biimplies",p_biimplies_q)
+print(p_equivalent_q)
+print(simplify(p_equivalent_q))
+# Substitute truth values
+truth_values = {p: True, q: False,r:True}
+pandq = p_and_q.subs(truth_values)
+porq = p_or_q.subs(truth_values)
+notp = not_p.subs(truth_values)
+pimpliesq = p_implies_q.subs(truth_values)
+pbiimpliesq = p_biimplies_q.subs(truth_values)
+
+print("negation",notp) 
+print("Conjunction",pandq)
+print("Disjunction",porq)
+print("Implication",pimpliesq)
+print("BIImplication",pbiimpliesq)
+
+print(Not(And(p,q)).subs(truth_values))
+
+
+# Substitute truth values
+truth_values = {p: True, q: False,r:True}
+pandq = p_and_q.subs(truth_values)
+porq = p_or_q.subs(truth_values)
+notp = not_p.subs(truth_values)
+pimpliesq = p_implies_q.subs(truth_values)
+pbiimpliesq = p_biimplies_q.subs(truth_values)
+
+print("negation",notp) 
+print("Conjunction",pandq)
+print("Disjunction",porq)
+print("Implication",pimpliesq)
+print("BIImplication",pbiimpliesq)
+
+print(Not(And(p,q)).subs(truth_values))
+
+
+from sympy.logic.boolalg import truth_table
+var=[p,q]
+expr1=p_and_q
+expr2=p_or_q
+expr3=not_p
+expr4=p_implies_q
+expr5=p_biimplies_q
+print("AND")
+tt1 = truth_table(expr1,var)
+for row1 in tt1:
+    print(row1)
+
+print("OR")
+tt2 = truth_table(expr2,var)
+for row2 in tt2:
+    print(row2)
+
+print("NOT")
+tt3 = truth_table(p,var)
+for row3 in tt3:
+    print(row3)
+
+print("IMPLIES")
+tt4 = truth_table(expr4,var)
+for row4 in tt4:
+    print(row4)
+
+print("BIIMPLIES")
+tt5 = truth_table(expr5,var)
+for row5 in tt5:
+    print(row4)
+
+
+
+s,t,u=symbols('s t u')
+t1 = truth_table(And(s,t,u),[s,t,u])
+print(list(t1))
+
+from sympy import pprint
+
+pprint(p_or_q, use_unicode=True)
+pprint(p_and_q, use_unicode=True)
+pprint(not_p, use_unicode=True)
+pprint(p_biimplies_q, use_unicode=True)
+from sympy import simplify
+
+expr = Or(And(p, q), And(p, r))
+simplified_expr = simplify(expr)
+print(expr)
+print(simplified_expr)
+
+from sympy import Equivalent
+print("Demorgan's Law")
+expr1 = Not(And(p, q))
+expr2 = Or(Not(p), Not(q))
+Demorganequiv = Equivalent(expr1, expr2)
+print(Demorganequiv)
+print(simplify(Demorganequiv))
+
+print("Contraposition  Law")
+
+expr3=Implies(p,q)
+expr4=Implies(Not(q),Not(p))
+contrapositionequiv = Equivalent(expr3, expr4)
+print(contrapositionequiv)
+print(simplify(contrapositionequiv))
+
+
+from sympy import symbols, Not, And, Or, Implies, Equivalent
+from sympy.logic.boolalg import to_cnf
+
+# Define symbolic variables
+p, q, r = symbols('p q r')
+
+
+# Apply and display logical equivalence rules to original expressions
+print("Rule 1: De Morgan's Laws")
+rule1_result = to_cnf(Not(And(p, q)))
+print("Result:", rule1_result)
+print()
+
+print("Rule 2: Distribution (AND over OR)")
+rule2_result = to_cnf(Or(p, And(q, r)))
+print("Result:", rule2_result)
+print()
+
+print("Rule 3: Implication Elimination")
+rule3_result = to_cnf(Implies(p, q))
+print("Result:", rule3_result)
+print()
+
+print("Rule 4: Bi-Implication Elimination")
+rule4_result = to_cnf(Equivalent(p, q))
+print("Result:", rule4_result)
+print()
+
+print("Rule 5: Double Negation")
+rule5_result = to_cnf(Not(Not(p)))
+print("Result:", rule5_result)
+print()
+
+print("Rule 6: Idempotent Law")
+rule6_result = to_cnf(Or(p, p))
+print("Result:", rule6_result)
+print()
+
+
+print("Rule 7: Negation of True and False")
+rule7_result = to_cnf(Not(True))
+print("Result:", rule7_result)
+print()
+rule8_result = to_cnf(Not(False))
+print("Result:", rule8_result)
+print()
+
+
+from sympy import to_cnf, to_dnf
+
+expr = Equivalent(p,Or(q,r))
+cnf_expr = to_cnf(expr)
+dnf_expr = to_dnf(expr)
+print(expr)
+print(cnf_expr)
+print(dnf_expr)
