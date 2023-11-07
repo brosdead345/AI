@@ -38,13 +38,16 @@ def a_star(initial_state):
         if current_node.puzzle == GOAL_STATE:
             path = []
             actions = []
+            heuristic_values = []
             while current_node:
                 path.append(current_node.puzzle)
                 actions.append(current_node.action)
+                heuristic_values.append(current_node.h)
                 current_node = current_node.parent
             path.reverse()
             actions.reverse()
-            return path, actions
+            heuristic_values.reverse()
+            return path, actions, heuristic_values
 
         closed_set.add(tuple(current_node.puzzle))
 
@@ -63,7 +66,7 @@ def a_star(initial_state):
                     child_node.g = current_node.g + 1
                     open_set.put((child_node.g + child_node.h, child_node))
 
-    return None, None
+    return None, None, None
 
 # Define the print_puzzle function
 def print_puzzle(puzzle):
@@ -79,7 +82,7 @@ puzzle_input = input("Enter your puzzle (e.g., '1 2 3 4 5 6 7 0 8'): ")
 puzzle_input_list = puzzle_input.split()
 initial_state = [int(val) for val in puzzle_input_list]
 
-path, actions = a_star(initial_state)
+path, actions, heuristic_values = a_star(initial_state)
 
 if path:
     print("Initial state:")
@@ -89,6 +92,7 @@ if path:
     for i in range(1, len(path)):
         print("Move", moves_2.get(actions[i]))
         print_puzzle(path[i])
+        print("Heuristic value:", heuristic_values[i])
         print()
 
     if path[-1] == GOAL_STATE:
